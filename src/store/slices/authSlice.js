@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { AUTH_TOKEN } from 'constants/AuthConstant';
 import FirebaseService from 'services/FirebaseService';
 import AuthService from 'services/AuthService';
+import Request from 'utils/request';
 
 export const initialState = {
 	loading: false,
@@ -14,6 +15,11 @@ export const initialState = {
 export const signIn = createAsyncThunk('auth/login',async (data, { rejectWithValue }) => {
 	const { email, password } = data
 	console.log(data, "login databu")
+	Request.postRequest("/login", { email, password }).then(response => {
+		console.log(response)
+	}).catch(error => {
+		console.log(error)
+	})
 	try {
 		const response = await AuthService.login({email, password})
 		const token = response.data.token;
